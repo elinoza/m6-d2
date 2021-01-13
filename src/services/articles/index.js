@@ -9,7 +9,7 @@ const articlesRouter = express.Router()
 articlesRouter.get("/", async (req, res, next) => {
   try {
     const query= req.query.sort
-    const articles = await articleSchema.find().sort({"headLine":-1})
+    const articles = await articleSchema.find().sort({createdAt:-1}).limit(1).skip(0)
     res.send(articles)
   } catch (error) {
     next(error)
