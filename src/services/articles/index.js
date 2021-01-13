@@ -8,7 +8,8 @@ const articlesRouter = express.Router()
 
 articlesRouter.get("/", async (req, res, next) => {
   try {
-    const articles = await articleSchema.find()
+    const query= req.query.sort
+    const articles = await articleSchema.find().sort({"headLine":-1})
     res.send(articles)
   } catch (error) {
     next(error)
@@ -137,13 +138,13 @@ articlesRouter.get("/:id/reviews/:reviewId", async (req, res, next) => {
   }
 })
 
-articlesRouter.delete("/:id/purchaseHistory/:reviewId", async (req, res, next) => {
+articlesRouter.delete("/:id/reviews/:reviewId", async (req, res, next) => {
   try {
     const modifiedreview = await articleSchema.findByIdAndUpdate(
       req.params.id,
       {
         $pull: {
-          purchaseHistory: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
+          reviews: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
         },
       },
       {
@@ -177,9 +178,9 @@ articlesRouter.put("/:id/reviews/:reviewId", async (req, res, next) => {
       const modifiedreview = await articleSchema.findOneAndUpdate(
         {
           _id: mongoose.Types.ObjectId(req.params.id),
-          "purchaseHistory._id": mongoose.Types.ObjectId(req.params.reviewId),
+          "reviews._id": mongoose.Types.ObjectId(req.params.reviewId),
         },
-        { $set: { "purchaseHistory.$": reviewToReplace } },
+        { $set: { "reviews.$": reviewToReplace } },
         {
           runValidators: true,
           new: true,
