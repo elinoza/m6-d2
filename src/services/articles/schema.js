@@ -30,8 +30,17 @@ const articleSchema = new Schema(
         }
         ,
     cover: {
-      type: String }
-    }
+      type: String },
+      reviews: [
+        {
+          text: String,
+          user: String
+        },
+      ],
+    },
+    
+    {timestamps:true}
+    
 )
 
 articleSchema.plugin(mongoosePaginate)
