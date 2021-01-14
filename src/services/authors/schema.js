@@ -4,12 +4,12 @@ const mongoose = require("mongoose")
 
 const AuthorSchema = new Schema(
 {
-author:{
+
     name:{
     type: String},
     img:{
     type: String}
-    }
+    
 
 })
 

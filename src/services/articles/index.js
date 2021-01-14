@@ -16,9 +16,9 @@ articlesRouter.get("/", async (req, res, next) => {
     .sort(query.options.sort)
     .limit(query.options.limit)
     .skip(query.options.skip)
-    .populate("authors")
+    .populate("Author")
 
-    res.send({ links: query.links("/articles", total), articles })
+    res.send({ articles })
   } catch (error) {
     next(error)
   }

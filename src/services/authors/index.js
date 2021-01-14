@@ -32,6 +32,7 @@ authorsRouter.get("/:id", async (req, res, next) => {
 
 authorsRouter.post("/", async (req, res, next) => {
   try {
+     console.log(req.body) 
     const newAuthor = new AuthorSchema(req.body)
     const { _id } = await newAuthor.save()
 
