@@ -3,14 +3,22 @@ const uniqid= require("uniqid")
 const mongoose = require("mongoose")
 const articleSchema = require("./schema")
 const reviewSchema = require("../reviews/schema")
+const q2m = require("query-to-mongo")
 
 const articlesRouter = express.Router()
 
+
 articlesRouter.get("/", async (req, res, next) => {
   try {
-    const query= req.query.sort
-    const articles = await articleSchema.find().sort({createdAt:-1}).limit(1).skip(0)
-    res.send(articles)
+    const query= q2m(req.query)
+    const total = await articleSchema.countDocuments(query.criteria)
+    const articles = await articleSchema.find(query.criteria)
+    .sort(query.options.sort)
+    .limit(query.options.limit)
+    .skip(query.options.skip)
+    .populate("authors")
+
+    res.send({ links: query.links("/articles", total), articles })
   } catch (error) {
     next(error)
   }

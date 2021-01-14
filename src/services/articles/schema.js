@@ -20,15 +20,7 @@ const articleSchema = new Schema(
       type: String},
       img:{
         type: String}
-      }
-      ,
-      author:{
-        name:{
-        type: String},
-        img:{
-          type: String}
-        }
-        ,
+      } ,
     cover: {
       type: String },
       reviews: [
@@ -37,6 +29,7 @@ const articleSchema = new Schema(
           user: String
         },
       ],
+      authors: [{ type: Schema.Types.ObjectId, ref: "Author" }]
     },
     
     {timestamps:true}
