@@ -16,9 +16,12 @@ articlesRouter.get("/", async (req, res, next) => {
     .sort(query.options.sort)
     .limit(query.options.limit)
     .skip(query.options.skip)
-    .populate("Author")
+    .populate("authors")
 
-    res.send({ articles })
+    res.send({ links: query.links("/articles", total), articles })
+
+    // const articles = await articleSchema.find().populate("authors")
+    res.send(articles )
   } catch (error) {
     next(error)
   }
@@ -27,7 +30,8 @@ articlesRouter.get("/", async (req, res, next) => {
 articlesRouter.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id
-    const article = await articleSchema.findById(id)
+  
+    const article = await articleSchema.findarticleWithAuthors(id)
     if (article) {
       res.send(article)
     } else {

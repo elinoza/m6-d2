@@ -1,6 +1,6 @@
-const { Schema } = require("mongoose")
+const { Schema,model } = require("mongoose")
 const mongoose = require("mongoose")
-const mongoosePaginate = require("mongoose-paginate-v2")
+
 
 const articleSchema = new Schema(
   {
@@ -35,7 +35,10 @@ const articleSchema = new Schema(
     {timestamps:true}
     
 )
+articleSchema.static("findarticleWithAuthors", async function (id) {
+  const article = await articleModel.findById(id).populate("authors")
+  return article
+})
 
-articleSchema.plugin(mongoosePaginate)
-
+const articleModel = model("article", articleSchema)
 module.exports = mongoose.model("article", articleSchema)
