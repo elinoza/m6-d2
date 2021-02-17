@@ -34,7 +34,7 @@ authorsRouter.get("/:id", async (req, res, next) => {
 
 authorsRouter.post("/", async (req, res, next) => {
   try {
-     console.log(req.body) 
+    
     const newAuthor = new AuthorSchema(req.body)
     const { _id } = await newAuthor.save()
 
@@ -76,8 +76,9 @@ authorsRouter.delete("/:id", async (req, res, next) => {
 authorsRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body
-    const user = await AuthorSchema.findByCredentials(email, password)
-    const tokens = await authenticate(user)
+    const author= await AuthorSchema.findByCredentials(email, password)
+    console.log(author)
+    const tokens = await authenticate(author)
     res.send(tokens)
   } catch (error) {
     next(error)

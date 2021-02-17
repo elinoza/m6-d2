@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken")
 
 
-const authenticate = async user => {
+const authenticate = async author => {
   try {
-    const newAccessToken = await generateJWT({ _id: user._id })
+      console.log(author)
+    const newAccessToken = await generateJWT({ _id: author._id })
    
     return newAccessToken
   } catch (error) {
