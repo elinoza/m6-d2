@@ -1,6 +1,8 @@
 const express = require("express")
 
 const AuthorSchema = require("./schema")
+const { authenticate} = require("../auth/tools")
+const { authorize } = require("../auth/middleware")
 
 const authorsRouter = express.Router()
 
@@ -67,6 +69,16 @@ authorsRouter.delete("/:id", async (req, res, next) => {
       error.httpStatusCode = 404
       next(error)
     }
+  } catch (error) {
+    next(error)
+  }
+})
+authorsRouter.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body
+    const user = await AuthorSchema.findByCredentials(email, password)
+    const tokens = await authenticate(user)
+    res.send(tokens)
   } catch (error) {
     next(error)
   }
