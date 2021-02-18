@@ -80,18 +80,18 @@ authorsRouter.post("/login", async (req, res, next) => {
     const author= await AuthorSchema.findByCredentials(email, password)
     console.log(author)
     const tokens = await authenticate(author)
-    res.send(tokens)
-     //Send back tokens
-    //  res.cookie("accessToken", accessToken, {
-    //   httpOnly: true,
-    //   path: "/",
-    // })
-    // res.cookie("refreshToken", refreshToken, {
-    //   httpOnly: true,
-    //   path: "/users/refreshToken",
-    // })
+    // without cookies res.send(tokens)
+    //  Send back tokens
+     res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      path: "/",
+    })
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/users/refreshToken",
+    })
 
-    // res.send("Ok")
+    res.send("Ok")
   } catch (error) {
     next(error)
   }

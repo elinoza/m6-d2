@@ -25,7 +25,8 @@ passport.use(
                 googleId: profile.id,
                 name: profile.name.givenName,
                 surname: profile.name.familyName,
-                email: profile.emails[0].value
+                email: profile.emails[0].value,
+                // refreshToken:[]
                
            }
           const createdUser = new AuthorSchema(newUser)
