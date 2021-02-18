@@ -7,7 +7,7 @@ const { authorize } = require("../auth/middleware")
 
 const authorsRouter = express.Router()
 
-authorsRouter.get("/", authorize, async (req, res, next) => {
+authorsRouter.get("/",  async (req, res, next) => {
   try {
     const authors = await AuthorSchema.find()
     res.send(authors)
@@ -16,7 +16,7 @@ authorsRouter.get("/", authorize, async (req, res, next) => {
   }
 })
 
-authorsRouter.get("/:id", authorize, async (req, res, next) => {
+authorsRouter.get("/:id",  async (req, res, next) => {
   try {
     const id = req.params.id
     const author = await AuthorSchema.findById(id)
@@ -45,7 +45,7 @@ authorsRouter.post("/", async (req, res, next) => {
   }
 })
 
-authorsRouter.put("/:id",authorize, async (req, res, next) => {
+authorsRouter.put("/:id", async (req, res, next) => {
   try {
     const author = await AuthorSchema.findByIdAndUpdate(req.params.id, req.body)
     if (author) {
@@ -60,7 +60,7 @@ authorsRouter.put("/:id",authorize, async (req, res, next) => {
   }
 })
 
-authorsRouter.delete("/:id", authorize,async (req, res, next) => {
+authorsRouter.delete("/:id", async (req, res, next) => {
   try {
     const author = await AuthorSchema.findByIdAndDelete(req.params.id)
     if (author) {
@@ -116,7 +116,6 @@ authorsRouter.get(
         path: "/authors/refreshToken",
       })
        res.status(200).redirect("http://localhost:3000/")
-
       // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
     } catch (error) {
       next(error)

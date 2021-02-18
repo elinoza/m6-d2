@@ -5,6 +5,7 @@ const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
 const passport = require("passport")
 const cookieParser = require("cookie-parser")
+const oauth = require("./services/auth/oauth")
 
 const articlesRouter = require("./services/articles")
 const reviewsRouter = require("./services/reviews")
@@ -45,7 +46,7 @@ server.use(cors(corsOptions))
 server.use("/articles", articlesRouter)
 server.use("/reviews", reviewsRouter)
 server.use("/authors", authorsRouter)
-const oauth = require("./services/auth/oauth")
+
 
 // ERROR HANDLERS MIDDLEWARES
 
