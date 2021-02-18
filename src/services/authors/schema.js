@@ -14,19 +14,14 @@ const AuthorSchema = new Schema(
 
 })
 
-AuthorSchema .statics.findByCredentials = async function(email, plainPW)  {
-    const author = await this.findOne({ email })
-    
+AuthorSchema.methods.toJSON = function () {
+    const author = this
+    const authorObject = author.toObject()
   
-    if (author) {
-      const isMatch = await bcrypt.compare(plainPW, author.password)
-      console.log("isMatch?",isMatch)
-      if (isMatch) 
-      return author
-      else return null
-    } else {
-      return null
-    }
+    delete authorObject.password
+    delete authorObject.__v
+  
+    return authorObject
   }
 
   AuthorSchema.pre("save", async function (next) {
@@ -38,5 +33,21 @@ AuthorSchema .statics.findByCredentials = async function(email, plainPW)  {
     }
     next()
   })
+
+AuthorSchema .statics.findByCredentials = async function(email, plainPW)  {
+    const author = await this.findOne({ email })
+    
+    if (author) {
+      const isMatch = await bcrypt.compare(plainPW, author.password)
+      console.log("isMatch?",isMatch)
+      if (isMatch) 
+      return author
+      else return null
+    } else {
+      return null
+    }
+  }
+
+  
 
 module.exports = mongoose.model("Author", AuthorSchema)
