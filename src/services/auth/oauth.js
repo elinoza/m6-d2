@@ -26,15 +26,17 @@ passport.use(
                 name: profile.name.givenName,
                 surname: profile.name.familyName,
                 email: profile.emails[0].value,
+                img:profile.picture
                 // refreshToken:[]
-               
            }
-          const createdUser = new AuthorSchema(newUser)
+          const createdUser =  new AuthorSchema(newUser)
           await createdUser.save()
           const tokens = await authenticate(createdUser)
+          
           next(null, { user: createdUser, tokens })
         }
       } catch (error) {
+          console.log(error)
         next(error)
       }
     }

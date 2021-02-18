@@ -15,7 +15,31 @@ authorsRouter.get("/",  async (req, res, next) => {
     next(error)
   }
 })
+authorsRouter.get(
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+)
 
+authorsRouter.get(
+  "/googleRedirect",
+  passport.authenticate("google"),
+  async (req, res, next) => {
+    try {
+      console.log("req:",req)
+      res.cookie("accessToken", req.user.tokens.accessToken, {
+        httpOnly: true,
+      })
+      // res.cookie("refreshToken", req.user.tokens.refreshToken, {
+      //   httpOnly: true,
+      //   path: "/authors/refreshToken",
+      // })
+       res.status(200).redirect("http://localhost:3000/")
+      // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
+    } catch (error) {
+      next(error)
+    }
+  }
+)
 authorsRouter.get("/:id",  async (req, res, next) => {
   try {
     const id = req.params.id
@@ -98,29 +122,6 @@ authorsRouter.post("/login", async (req, res, next) => {
 })
 
 
-authorsRouter.get(
-  "/googleLogin",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-)
 
-authorsRouter.get(
-  "/googleRedirect",
-  passport.authenticate("google"),
-  async (req, res, next) => {
-    try {
-      res.cookie("accessToken", req.user.tokens.accessToken, {
-        httpOnly: true,
-      })
-      res.cookie("refreshToken", req.user.tokens.refreshToken, {
-        httpOnly: true,
-        path: "/authors/refreshToken",
-      })
-       res.status(200).redirect("http://localhost:3000/")
-      // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
-    } catch (error) {
-      next(error)
-    }
-  }
-)
 
 module.exports = authorsRouter

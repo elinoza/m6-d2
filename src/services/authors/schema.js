@@ -10,6 +10,7 @@ const AuthorSchema = new Schema(
     img:String,
     password: String,
     email: String,
+    googleId: String,
     
 
 })
