@@ -4,24 +4,25 @@ const { verifyJWT } = require("./tools")
 
 const authorize = async (req, res, next) => {
   try {
+    
     const token = req.header("Authorization").replace("Bearer ", "")
-    // console.log("token",token)
+    console.log("token",token)
     const decoded = await verifyJWT(token)
-    // console.log("decoded",decoded)
-    const user = await AuthorSchema.findOne({
+    console.log("decoded",decoded)
+    const author = await AuthorSchema.findOne({
       _id: decoded._id,
     })
-    console.log("user",user)
+    console.log("author",author)
 
-    if (!user) {
+    if (!author) {
       throw new Error()
     }
-console.log(req.user,req.token)
+console.log(req.author,req.token)
     req.token = token
-    req.user = user
+    req.author = author
     next()
   } catch (e) {
-    const err = new Error("Please authenticate")
+    const err = new Error("Please authenticate from authorize middleware")
     err.httpStatusCode = 401
     next(err)
   }
