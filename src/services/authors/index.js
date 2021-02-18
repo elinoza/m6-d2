@@ -1,4 +1,5 @@
 const express = require("express")
+const passport = require("passport")
 
 const AuthorSchema = require("./schema")
 const { authenticate} = require("../auth/tools")
@@ -80,9 +81,47 @@ authorsRouter.post("/login", async (req, res, next) => {
     console.log(author)
     const tokens = await authenticate(author)
     res.send(tokens)
+     //Send back tokens
+    //  res.cookie("accessToken", accessToken, {
+    //   httpOnly: true,
+    //   path: "/",
+    // })
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   path: "/users/refreshToken",
+    // })
+
+    // res.send("Ok")
   } catch (error) {
     next(error)
   }
 })
+
+
+authorsRouter.get(
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+)
+
+authorsRouter.get(
+  "/googleRedirect",
+  passport.authenticate("google"),
+  async (req, res, next) => {
+    try {
+      res.cookie("accessToken", req.user.tokens.accessToken, {
+        httpOnly: true,
+      })
+      res.cookie("refreshToken", req.user.tokens.refreshToken, {
+        httpOnly: true,
+        path: "/authors/refreshToken",
+      })
+       res.status(200).redirect("http://localhost:3000/")
+
+      // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
+    } catch (error) {
+      next(error)
+    }
+  }
+)
 
 module.exports = authorsRouter

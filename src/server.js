@@ -3,6 +3,7 @@ const cors = require("cors")
 const { join } = require("path")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
+const passport = require("passport")
 
 const articlesRouter = require("./services/articles")
 const reviewsRouter = require("./services/reviews")
@@ -21,12 +22,14 @@ const port = process.env.PORT
 const staticFolderPath = join(__dirname, "../public")
 server.use(express.static(staticFolderPath))
 server.use(express.json())
+server.use(passport.initialize())
 
 server.use(cors())
 
 server.use("/articles", articlesRouter)
 server.use("/reviews", reviewsRouter)
 server.use("/authors", authorsRouter)
+const oauth = require("./services/auth/oauth")
 
 // ERROR HANDLERS MIDDLEWARES
 
