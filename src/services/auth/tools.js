@@ -18,7 +18,7 @@ const generateJWT = payload =>
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 6 },
+      { expiresIn: '365d' },
       (err, token) => {
         if (err) rej(err)
         res(token)
@@ -29,7 +29,7 @@ const generateJWT = payload =>
 const verifyJWT = token =>
   new Promise((res, rej) =>
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        // console.log("token",token)
+      console.log("decoded",decoded,process.env.JWT_SECRET)
       if (err) rej(err)
       res(decoded)
     })
